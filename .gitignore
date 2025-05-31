@@ -1,0 +1,60 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environment
+venv/
+env/
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.sqlite3
+db.sqlite3
+
+# Media and static files
+/media/
+staticfiles/
+static/
+
+# Local settings
+settings_local.py
+
+# Node.js dependencies
+node_modules/
+
+# VSCode settings
+.vscode/
+
+# IDE specific files
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# MacOS specific files
+.DS_Store
+
+# Test coverage reports
+htmlcov/
+*.cover
+.coverage
+*.coverage.*
+.cache
+
+# Profiling data
+*.prof
+*.lprof
+
+# Deployment files
+*.bak
+*.swp
+*.pid
+
+# Environment variables file
+.env
