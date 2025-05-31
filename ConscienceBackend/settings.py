@@ -23,10 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)%3x7!1h+x&x)22$z=*9795pgw#+nmreu(uz+4v57s0p6*3-_&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'conscience.pythonanywhere.com']
 
 # Application definition
 
@@ -52,9 +51,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080"
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.github\.io$",
+    r"^http://localhost:\d+$",  
 ]
+
+CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_ALL_ORIGINS = True
 
