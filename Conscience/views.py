@@ -1,7 +1,11 @@
-from django.shortcuts import render
+import json
 from django.http import JsonResponse
-from .models import Author, Magazine
+from .models import Author, Magazine, Category
+from django.utils.text import slugify
 from django.shortcuts import get_object_or_404
+from django.utils.dateparse import parse_datetime
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.http import JsonResponse, HttpResponseNotAllowed
 
 # Create your views here.
 def getMagazines(request):
@@ -73,7 +77,7 @@ def getAuthorPublications(request, username):
         "title": magazine.title,
         "slug": magazine.slug,
         "about": magazine.about,
-        "content": magazine.excerpt,  
+        "content": magazine.content,  
         "author": magazine.author.username,  
         "date": magazine.date.strftime('%Y-%m-%d'), 
         "readTime": magazine.read_time,
@@ -85,3 +89,63 @@ def getAuthorPublications(request, username):
     ]
 
     return JsonResponse(magazines, safe=False)
+
+from django.middleware.csrf import get_token
+
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    # This will set the csrftoken cookie AND return the token
+    return JsonResponse({'csrfToken': get_token(request)})
+
+
+@csrf_exempt
+def createMagazine(request):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    title         = data.get('title', '').strip()
+    about         = data.get('about', '')
+    content       = data.get('content', '')
+    author_slug   = data.get('author')     
+    category_name = data.get('category')  
+    cover_image   = data.get('cover_image', '')
+    date_str      = data.get('date')
+    
+    # minimal required-field check
+    if not (title and author_slug and category_name and date_str):
+        return JsonResponse({'error': 'Missing required fields'}, status=400)
+
+    # lookup by slug / name
+    author   = get_object_or_404(Author, username=author_slug)
+    category = get_object_or_404(Category, name=category_name)
+
+    
+    date = parse_datetime(date_str)
+    if date is None:
+        return JsonResponse({'error': 'Invalid date format'}, status=400)
+
+    mag = Magazine(
+        title=title,
+        about=about,
+        content=content,
+        author=author,
+        date=date,
+        category=category,
+        cover_image=cover_image,
+        featured=False,
+    )
+    mag.slug = slugify(title)
+    mag.save()
+    
+    print(f"model saved")
+
+    return JsonResponse({
+        'id': mag.id,
+        'slug': mag.slug,
+        'created_at': mag.created_at.isoformat(),
+    }, status=201)
