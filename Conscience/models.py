@@ -34,7 +34,7 @@ class Magazine(models.Model):
     title = models.CharField(max_length=150)
     slug = models.SlugField(unique=True, blank=True, null=True)
     about = models.TextField(blank=True, null=True)
-    excerpt = models.TextField(blank=True, null=True)
+    content = models.TextField(blank=True, null=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="magazines")
     date = models.DateTimeField()
     read_time = models.CharField(max_length=20, blank=True, null=True)
