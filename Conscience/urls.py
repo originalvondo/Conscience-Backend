@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('csrf/', views.get_csrf_token, name='get-csrf'),
     path('magazines/', views.getMagazines, name="magazines"),
-    path('magazine/<slug:slug>/', views.getMagazineInfo, name="magazine"),
+    path('magazines/<slug:slug>/', views.getMagazineInfo, name="magazine"),
     path('magazine/create', views.createMagazine, name="create_magazine"),
     path('author/<str:username>/', views.getAuthorInfo, name="author"),
     path('author/<str:username>/publications/', views.getAuthorPublications, name="authorPublications"),
