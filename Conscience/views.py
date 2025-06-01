@@ -12,7 +12,7 @@ def getMagazines(request):
             "title": magazine.title,
             "slug": magazine.slug,
             "about": magazine.about,
-            "content": magazine.excerpt,  
+            "content": magazine.content,  
             "author": magazine.author.username, 
             "date": magazine.date.strftime("%d, %B %Y"),  
             "readTime": magazine.read_time,
