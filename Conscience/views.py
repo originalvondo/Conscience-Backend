@@ -1,11 +1,12 @@
 import json
 from django.http import JsonResponse
-from .models import Author, Magazine, Category
 from django.utils.text import slugify
+from django.middleware.csrf import get_token
+from .models import Author, Magazine, Category
 from django.shortcuts import get_object_or_404
 from django.utils.dateparse import parse_datetime
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.http import JsonResponse, HttpResponseNotAllowed
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
 # Create your views here.
 def getMagazines(request):
@@ -66,7 +67,6 @@ def getAuthorInfo(request, username):
   
   return JsonResponse(authorInfo)
 
-
 def getAuthorPublications(request, username):
     author = get_object_or_404(Author, username=username)
     authorPublications = Magazine.objects.filter(author=author)
@@ -90,13 +90,10 @@ def getAuthorPublications(request, username):
 
     return JsonResponse(magazines, safe=False)
 
-from django.middleware.csrf import get_token
-
 @ensure_csrf_cookie
 def get_csrf_token(request):
     # This will set the csrftoken cookie AND return the token
     return JsonResponse({'csrfToken': get_token(request)})
-
 
 @csrf_exempt
 def createMagazine(request):
@@ -149,3 +146,7 @@ def createMagazine(request):
         'slug': mag.slug,
         'created_at': mag.created_at.isoformat(),
     }, status=201)
+    
+def get_categories(request):
+  categores = [category.name for category in Category.objects.all()]
+  return JsonResponse(categores, safe=False)
