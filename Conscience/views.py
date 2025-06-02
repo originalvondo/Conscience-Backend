@@ -67,6 +67,11 @@ def getAuthorInfo(request, username):
   
   return JsonResponse(authorInfo)
 
+def getAuthorImgUrl(request, username):
+  author = Author.objects.get(username=username)
+  imgUrl = author.image
+  return JsonResponse(imgUrl, safe=False)
+
 def getAuthorPublications(request, username):
     author = get_object_or_404(Author, username=username)
     authorPublications = Magazine.objects.filter(author=author)
