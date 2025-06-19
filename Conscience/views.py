@@ -54,6 +54,7 @@ def getAuthorsInfo(request):
     authorData = {
       "name": author.name,
       "username": author.username,
+      "image": author.image,
       "articles": list(author.magazines.all().values_list('title', flat="true")),
       "categories": ["art", "thoughts", "creativity"], 
       "bio": author.bio
