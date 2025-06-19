@@ -7,6 +7,7 @@ urlpatterns = [
     path('csrf/', views.get_csrf_token, name='get-csrf'),
     path('magazines/', views.getMagazines, name="magazines"),
     path('categories/', views.get_categories, name="categories"),
+    path('authors/', views.getAuthorsInfo, name="authors"),
     path('author/<str:username>/', views.getAuthorInfo, name="author"),
     path('authorImage/<str:username>/', views.getAuthorImgUrl, name="get_author_image"),
     path('magazine/create', views.createMagazine, name="create_magazine"),

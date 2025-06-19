@@ -47,6 +47,21 @@ def getMagazineInfo(request, slug):
 
   return JsonResponse(magazine)
 
+def getAuthorsInfo(request): 
+  authors = Author.objects.all()
+  allAuthors = []
+  for author in authors: 
+    authorData = {
+      "name": author.name,
+      "username": author.username,
+      "articles": list(author.magazines.all().values_list('title', flat="true")),
+      "categories": ["art", "thoughts", "creativity"], 
+      "bio": author.bio
+    }
+    allAuthors.append(authorData)
+
+  return JsonResponse(allAuthors, safe=False)
+
 def getAuthorInfo(request, username):
   author = Author.objects.get(username=username)
   authorInfo = {
@@ -58,9 +73,9 @@ def getAuthorInfo(request, username):
         "location": author.location,
         "email": author.email,
         "website": author.website,
-        "totalArticles": author.total_articles,
+        "totalArticles": len(list(author.magazines.all().values_list('title', flat="true"))),
         "articles": [
-          1, 231, 52 # article id's
+          article.id for article in author.magazines.all()
         ]
       }       
     }
